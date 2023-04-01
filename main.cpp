@@ -2,18 +2,16 @@
 #include <iostream>
 #include <string>
 
+int rows = 0;
+int columns = 0;
+
 using namespace std;
 
-float matrix[4][5] = {
-    {0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0},
-};
+float **matrix;
 
 void printMatrix() {
-  for (int i = 0; i < 4; i++) {
-    for (int j = 0; j < 5; j++) {
+  for (int i = 0; i < rows; i++) {
+    for (int j = 0; j < columns; j++) {
 
       printf("%5.2f,", matrix[i][j]);
     }
@@ -39,12 +37,12 @@ void parseAndExecSum(string command, int firstLine, char operation) {
 
   switch (operation) {
   case '+':
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < columns; i++) {
       matrix[firstLine][i] += mult * matrix[secLine][i];
     }
     break;
   case '-':
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < columns; i++) {
       matrix[firstLine][i] -= mult * matrix[secLine][i];
     }
     break;
@@ -56,29 +54,28 @@ void parseAndExecSum(string command, int firstLine, char operation) {
 void parseAndExecMult(string command, int firstLine, char operation) {
   // parse multiplicator or divisor
   string number;
-  for (int i = 3;i<command.length(); i++) {
+  for (int i = 3; i < command.length(); i++) {
     number += command[i];
   }
   float num = stof(number);
 
   // exec mult or div
 
-   switch (operation) {
+  switch (operation) {
   case '*':
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < columns; i++) {
       matrix[firstLine][i] *= num;
     }
     break;
   case '/':
-    for (int i = 0; i < 5; i++) {
-       matrix[firstLine][i] /= num;
+    for (int i = 0; i < columns; i++) {
+      matrix[firstLine][i] /= num;
     }
     break;
   default:
     cout << "lol";
     break;
   }
-
 }
 
 void parseAndExecSwap(string command, int firstLine, char operation) {
@@ -86,11 +83,11 @@ void parseAndExecSwap(string command, int firstLine, char operation) {
   int secLine = command[5] - '0' - 1;
 
   // exec swap
-   for (int i = 0; i < 5; i++) {
-      float tmp =  matrix[firstLine][i];
-       matrix[firstLine][i] =  matrix[secLine][i];
-       matrix[secLine][i] = tmp;
-    }
+  for (int i = 0; i < columns; i++) {
+    float tmp = matrix[firstLine][i];
+    matrix[firstLine][i] = matrix[secLine][i];
+    matrix[secLine][i] = tmp;
+  }
 }
 
 void parseAndExec(string command) {
@@ -118,8 +115,21 @@ void parseAndExec(string command) {
 
 int main() {
 
-  for (int i = 0; i < 4; i++) {
-    for (int j = 0; j < 5; j++) {
+  cout << "Rows:";
+  cin >> rows;
+  cout << "Columns:";
+  cin >> columns;
+
+  // alocate matrix
+
+  matrix = new float *[rows];
+
+  for (int i = 0; i < columns; i++) {
+    matrix[i] = new float[columns];
+  }
+
+  for (int i = 0; i < rows; i++) {
+    for (int j = 0; j < columns; j++) {
       cin >> matrix[i][j];
     }
   }
